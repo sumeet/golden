@@ -2,7 +2,7 @@ bspwm golden-ratio expansion for focused windows, like in the [golden-ratio.el](
 
 Whenever you focus a window, this script will increase its size considerably (by about 1.6x). Whatever you're working with gets more real estate on the screen. As you interact with different windows, the active one gets expanded.
 
-![Demo](https://media.giphy.com/media/26ucDPWNQfiyMjNLFK/giphy.gif)
+![Demo](https://github.com/sumeet/golden/raw/master/golden-demo.gif)
 
 Usage:
 
