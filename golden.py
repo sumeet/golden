@@ -12,7 +12,7 @@ GOLDEN_SECOND = 1 - GOLDEN_FIRST
 
 def query_current_desktop():
     result = subprocess.run(['bspc', 'query', '-T', '-n', '@/'],
-                            capture_output=True)
+                            stdout=subprocess.PIPE)
     return Node(json.loads(result.stdout))
 
 
