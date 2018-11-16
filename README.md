@@ -42,4 +42,4 @@ bspc rule -a krunner state=floating
 exec ~/Projects/golden/run.sh &
 ```
 
-If you have any issues, please report them here. Thank you!
+Bugs, issues and questions all welcome in the Issues section. Thank you!
