@@ -4,10 +4,9 @@ import sys
 import pprint
 import subprocess
 
-
 GOLDEN = (1 + 5 ** 0.5) / 2
-GOLDEN_FIRST = 1 / GOLDEN
-GOLDEN_SECOND = 1 - GOLDEN_FIRST
+GOLDEN_RATIO = 1 / GOLDEN
+GOLDEN_RATIO_INVERSE = 1 - GOLDEN_RATIO
 
 
 def query_current_desktop():
@@ -58,10 +57,18 @@ class Node:
 def enlarge_by_golden_ratio(node):
     if not node.parent:
         return
+
+    # in bspwm, nodes each have two children:
+    #
+    # if the node we're trying to enlarge is the first parent, then set the
+    # node's ratio to the golden ratio. that will make it larger than the second
+    # node. otherwise, set the ratio to the inverse of the golden ratio, and
+    # then the second child (our node) will appear larger than the first child
     if node.parent.first_child.id == node.id:
-        ratio = GOLDEN_FIRST
+        ratio = GOLDEN_RATIO
     if node.parent.second_child.id == node.id:
-        ratio = GOLDEN_SECOND
+        ratio = GOLDEN_RATIO_INVERSE
+
     set_node_ratio(node.parent.id, ratio)
     enlarge_by_golden_ratio(node.parent)
 
@@ -74,11 +81,12 @@ def parse_node_focus_event(line):
     return int(monitor_id, 16), int(desktop_id, 16), int(node_id, 16)
 
 
-node_focus_events = filter(None, map(parse_node_focus_event, sys.stdin))
+if __name__ == '__main__':
+    node_focus_events = filter(None, map(parse_node_focus_event, sys.stdin))
 
 
-for monitor_id, desktop_id, focused_node_id in node_focus_events:
-    current_desktop_node = query_current_desktop()
+    for monitor_id, desktop_id, focused_node_id in node_focus_events:
+        current_desktop_node = query_current_desktop()
 
-    focused_node = current_desktop_node.find_node(focused_node_id)
-    enlarge_by_golden_ratio(focused_node)
+        focused_node = current_desktop_node.find_node(focused_node_id)
+        enlarge_by_golden_ratio(focused_node)
