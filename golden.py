@@ -26,6 +26,10 @@ class Node:
         self.parent = parent
 
     @property
+    def is_private(self):
+        return self._raw_output['private']
+
+    @property
     def id(self):
         return self._raw_output['id']
 
@@ -55,7 +59,14 @@ class Node:
 
 
 def enlarge_by_golden_ratio(node):
-    if not node.parent:
+    parent = node.parent
+
+    if not parent:
+        return
+
+    # don't resize if either child is marked as private: that means the user
+    # wants to keep this window from changing position or size if possible
+    if parent.first_child.is_private or parent.second_child.is_private:
         return
 
     # in bspwm, nodes each have two children:
@@ -64,13 +75,13 @@ def enlarge_by_golden_ratio(node):
     # node's ratio to the golden ratio. that will make it larger than the second
     # node. otherwise, set the ratio to the inverse of the golden ratio, and
     # then the second child (our node) will appear larger than the first child
-    if node.parent.first_child.id == node.id:
+    if parent.first_child.id == node.id:
         ratio = GOLDEN_RATIO
-    if node.parent.second_child.id == node.id:
+    if parent.second_child.id == node.id:
         ratio = GOLDEN_RATIO_INVERSE
 
-    set_node_ratio(node.parent.id, ratio)
-    enlarge_by_golden_ratio(node.parent)
+    set_node_ratio(parent.id, ratio)
+    enlarge_by_golden_ratio(parent)
 
 
 def parse_node_focus_event(line):
