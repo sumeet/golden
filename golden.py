@@ -45,6 +45,20 @@ class Node:
             return Node(self._raw_output['secondChild'], parent=self)
         return None
 
+    @property
+    def all_children(self):
+        first_child = self.first_child
+        if first_child:
+            yield first_child
+            for child in first_child.all_children:
+                yield child
+
+        second_child = self.second_child
+        if second_child:
+            yield second_child
+            for child in second_child.all_children:
+                yield child
+
     def find_node(self, node_id):
         if self.id == node_id:
             return self
@@ -64,9 +78,10 @@ def enlarge_by_golden_ratio(node):
     if not parent:
         return
 
-    # don't resize if either child is marked as private: that means the user
-    # wants to keep this window from changing position or size if possible
-    if parent.first_child.is_private or parent.second_child.is_private:
+    # don't resize if either child contains a window marked as private: that
+    # means the user wants to keep this window from changing position or size
+    # if possible
+    if any(child.is_private for child in parent.all_children):
         return
 
     # in bspwm, nodes each have two children:
