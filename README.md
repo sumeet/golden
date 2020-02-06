@@ -39,7 +39,8 @@ bspc rule -a retroarch state=floating
 bspc rule -a plasmashell state=floating border=off layer=normal manage=off center=true
 bspc rule -a krunner state=floating
 
-exec ~/Projects/golden/run.sh &
+pkill golden.sh &
+~/Projects/golden/golden.sh &
 ```
 
 Bugs, issues and questions all welcome in the Issues section. Thank you!
